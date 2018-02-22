@@ -25,8 +25,58 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>mySpeed=random_range(0.3,0.6);
+            <string>mySpeed=random_range(0.1,0.3);
 startTimer=60;
+attackDist=16;
+attackSpread=16;
+
+fireTimer=0;
+fireRate=5
+
+color=c_red
+route_y=-25
+routeRandOffset=irandom_range(-5,5)
+type=choose(unitType.soldier,unitType.tank,unitType.plane)
+
+
+switch(type)
+{
+    case unitType.soldier:
+    type=unitType.soldier
+    mask_index=sp_dot
+    sprite_index=sp_dot
+    mySpeed=random_range(0.1,0.3);
+    attackDist=16
+    attackSpread=16
+    startTimer=60
+    fireRate=5;
+    fireTimer=0;
+    break;
+    
+    case unitType.tank:
+    type=unitType.tank
+    mask_index=sp_tank
+    sprite_index=sp_tank
+    mySpeed=random_range(0.4,0.6);
+    attackDist=50
+    attackSpread=16
+    startTimer=90
+    fireRate=30;
+    fireTimer=0;
+    break;
+    
+    case unitType.plane:
+    type=unitType.plane
+    mask_index=sp_plane
+    sprite_index=sp_plane
+    mySpeed=random_range(0.7,1.1);
+    attackDist=25
+    attackSpread=25
+    startTimer=120
+    fireRate=2;
+    fireTimer=0;
+    break;
+}
 </string>
           </argument>
         </arguments>
@@ -59,12 +109,59 @@ else
     startTimer--
 }
 
+if fireTimer&gt;0
+{
+    fireTimer--;
+}
+enemy=collision_rectangle( x-attackDist, y+attackDist, x+attackDist, y-attackDist, obj_soldier, false, true);
+if (enemy!=noone and fireTimer==0)
+{
+    fireTimer=fireRate;
+    effect_create_above(ef_spark,x,y,.05,c_white)
+    fireTimer=fireRate;
+    roll=irandom(20)
+    if(roll&gt;15)
+    {
+        with(enemy)
+        {
+            roll=irandom(20)
+            if(roll&lt;10)
+            {
+                effect_create_above(ef_flare ,x,y,.1,c_red)
+                instance_destroy()
+            }
+        }
+    }
+}
 
 if(y&gt;room_height)
 {
     instance_destroy()
 }
 
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="8" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>draw_sprite_ext(sprite_index,0,x,y,1,1,0,color,1);
 </string>
           </argument>
         </arguments>

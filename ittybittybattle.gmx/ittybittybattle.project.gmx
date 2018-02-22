@@ -7,16 +7,25 @@
   <sounds name="sound"/>
   <sprites name="sprites">
     <sprite>sprites\sp_dot</sprite>
-    <sprite>sprites\sprite1</sprite>
+    <sprite>sprites\sp_tank</sprite>
+    <sprite>sprites\sp_btn</sprite>
+    <sprite>sprites\sprite3</sprite>
+    <sprite>sprites\sprite5</sprite>
+    <sprite>sprites\sp_plane</sprite>
+    <sprite>sprites\sp_bgrd</sprite>
   </sprites>
   <backgrounds name="background"/>
   <paths name="paths"/>
   <objects name="objects">
     <object>objects\obj_soldier</object>
-    <object>objects\tank</object>
     <object>objects\enemy_soldier</object>
     <object>objects\obj_mouseTracker</object>
-    <object>objects\button</object>
+    <object>objects\btn_soldier</object>
+    <object>objects\btn_tank</object>
+    <object>objects\btn_plane</object>
+    <object>objects\obj_marker</object>
+    <object>objects\obj_bk</object>
+    <object>objects\obj_backgrd_cont</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\room0</room>

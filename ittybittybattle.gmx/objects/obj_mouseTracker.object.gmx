@@ -25,7 +25,23 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>timer=10
+            <string>global.unitType=1;
+enum mode {
+    placeUnit,
+    setRoute,
+    selectUnit
+    }
+    
+enum unitType {
+    soldier,
+    tank,
+    plane
+    }
+    
+currentMode=mode.placeUnit;
+unitArrayCnt=0;
+
+timer=5*30
 </string>
           </argument>
         </arguments>
@@ -49,25 +65,80 @@
           <argument>
             <kind>1</kind>
             <string>
-if mouse_y&gt;room_height-150
+switch(currentMode)
 {
-    if mouse_check_button(mb_left)
-    {
-        instance_create(mouse_x,mouse_y,obj_soldier);
-    }
+    case mode.placeUnit:
+        if mouse_y&gt;room_height-32
+        {
+            //currentMode=mode.selectUnit;
+        }
+        else
+        {
+            //currentMode=mode.placeUnit;
+            if(mouse_check_button_released(mb_left))
+            {
+                if unitArrayCnt&gt;-1
+                {
+                    currentMode=mode.setRoute;
+                    modeTimer=5
+                }
+            }
+            else
+            if mouse_y&gt;room_height-150
+            {
+                
+                if(mouse_check_button(mb_left) and !position_meeting(mouse_x,mouse_y,obj_soldier))
+                {
+                    unitArrayCnt++;
+                
+                    unitArray[unitArrayCnt]=instance_create(mouse_x,mouse_y,obj_soldier);
+                    
+                }
+            }
+        }
+        
+        
+    break;
     
-    if mouse_check_button(mb_right)
-    {
-        instance_create(mouse_x,mouse_y,tank);
-    }
+    case mode.setRoute:
+        if mouse_y&gt;room_height-32
+        {
+            //currentMode=mode.selectUnit;
+        }
+        else
+        {
+            //currentMode=mode.setRoute;
+            if mouse_check_button_released(mb_left) and mouse_y&lt;room_height-150
+            {   
+                if unitArrayCnt&gt;0
+                {
+                    for(i=0;i&lt;unitArrayCnt+1;i++)
+                    {
+                        if instance_exists(unitArray[i])
+                        {
+                            unitArray[i].route_y=mouse_y;
+                        }
+                    }
+                    instance_create(mouse_x,mouse_y,obj_marker)
+                    unitArray=0;
+                    unitArrayCnt=-1;
+                }
+                currentMode=mode.placeUnit;
+                modeTimer=5
+                
+            } 
+        }
+    break;
 }
+
+
 if timer=0
 {
-    for(i=0;i&lt;room_width-100;i++)
+    for(i=0;i&lt;room_width-100;i+=2)
     {
         instance_create(50+i,10, enemy_soldier);
     }
-    timer=30*30;
+    timer=60*30;
 }
 timer--;
 
